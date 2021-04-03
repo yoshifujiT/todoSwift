@@ -9,7 +9,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var addBarButtonItem: UIBarButtonItem!;
+    private var addBarButtonItem: UIBarButtonItem!;
+    private var tableView = UITableView();
+    private var todoList = [String]();
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +24,11 @@ class ViewController: UIViewController {
         ];
 
         addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped(_:)))
-
         navigationItem.rightBarButtonItems = [addBarButtonItem];
+
+        tableView.frame = view.bounds;
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "todoCell");
+        view.addSubview(tableView);
 
         view.backgroundColor = .white;
     }
@@ -32,7 +37,19 @@ class ViewController: UIViewController {
         // TODO: should impl
         print("tapped");
     }
+}
 
+extension ViewController: UITableViewDataSource {
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return todoList.count;
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "todoCell", for: indexPath);
+        let todoTitle = todoList[indexPath.row];
+        cell.textLabel?.text = todoTitle;
+        return cell;
+    }
 }
 
